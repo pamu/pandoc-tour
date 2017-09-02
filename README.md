@@ -10,7 +10,7 @@
 ### Exploring Pandoc
 --------------------
 
-___Text.Pandoc___ module contains readers and writers for different kind of formats. Here are the exposed functions and definitions in Text.Pandoc package
+___Text.Pandoc___ module contains readers and writers for different kind of formats. Here are the exposed functions and data definitions in Text.Pandoc package
 
 ```haskell
                 Reader (..)
