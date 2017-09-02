@@ -7,6 +7,7 @@ import           Text.Pandoc
   convert returns a either of pandoc error or html string
   convert gives pandoc error in case markdown parsing fails
 -}
+
 convert :: String -> Either PandocError String
 convert markdownStr =
   fmap
