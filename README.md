@@ -9,7 +9,7 @@
 ### Exploring Pandoc
 --------------------
 
-___Text.Pandoc___ module contains readers and writers for different kind of formats. Here are the exposed functions and data definitions in Text.Pandoc package
+- ___Text.Pandoc___ module contains readers and writers for different kind of formats. Here are the exposed functions and data definitions in Text.Pandoc package
 
 ```haskell
                 Reader (..)
@@ -120,8 +120,11 @@ stack install
 
 echo "###Hello world" | pandoc-tour-exe                                    
 
-<h3 id="hello-world">Hello world</h3>%  # output
-``` 
+<h3 id="hello-world">Hello world</h3>%  
+
+```
+
+Note that `###Helloworld` markdown string is converted to html string 
 
 ### Retrieving information from pandoc markdown parse tree
 

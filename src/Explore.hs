@@ -13,3 +13,8 @@ convert markdownStr =
   fmap
     (writeHtmlString (def {writerHtml5 = True, writerHighlight = True}))
     (readMarkdown (def {readerStandalone = True}) markdownStr)
+
+convertHandlingError :: String -> String
+convertHandlingError str = handleError $ convert str
+
+

@@ -15,7 +15,7 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Explore
+  exposed-modules:     Explore, Meta
   build-depends:       base >= 4.7 && < 5
                      , pandoc
                      , text
