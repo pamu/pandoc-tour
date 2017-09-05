@@ -202,7 +202,7 @@ ata Block
                
 ```
 
-Above definitions are hidden in the ```pandoc``` lib. In order to access above definitions ```pandoc-definitions``` lib must be added to the dependencies.
+Above definitions are hidden in the ```pandoc``` lib. In order to access above definitions ```pandoc-types``` lib must be added to the dependencies.
 
 Using above definitions these functions are written to access the title, summary, date and tags of the markdown document.
 
