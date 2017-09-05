@@ -56,15 +56,15 @@ extractBlockStr metaValue =
     MetaBlocks blocks -> convertBlocks blocks
     _                 -> Nothing
 
-flatten :: [Maybe String] -> Maybe String
-flatten list =
+squash :: [Maybe String] -> Maybe String
+squash list =
   let newList = List.filter isJust list
   in if List.null newList
        then Nothing
        else Just $ unwords $ List.map (fromMaybe "") newList
 
 convertBlocks :: [Block] -> Maybe String
-convertBlocks = flatten . fmap convertBlock
+convertBlocks = squash . fmap convertBlock
 
 convertBlock :: Block -> Maybe String
 convertBlock (Para inlines) = Just $ unwords $ fmap (fromMaybe "" . convertInline) inlines
@@ -75,7 +75,7 @@ convertInline (Str str) = Just str
 convertInline _         = Nothing
 
 convertInlines :: [Inline] -> Maybe String
-convertInlines = flatten . fmap convertInline
+convertInlines = squash . fmap convertInline
 
 extractInlineStr :: MetaValue -> Maybe String
 extractInlineStr metaValue =
@@ -90,7 +90,3 @@ unfoldLine inlines = extractLineHelper inlines ""
     extractLineHelper [] result           = Nothing
     extractLineHelper (Space:xs) result   = Just $ result ++ " "
     extractLineHelper (Str str:xs) result = Just $ result ++ str
-
-extractStr :: Inline -> Maybe String
-extractStr (Str str) = Just str
-extractStr _         = Nothing
