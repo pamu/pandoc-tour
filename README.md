@@ -226,3 +226,5 @@ Hello world is the widely used string in the programming community.
 ```
 
 Meta functions can be used to retrieve this meta information of the above markdown document.
+
+![Meta info retrieval functions are here in Meta module](https://github.com/pamu/pandoc-tour/blob/master/src/Meta.hs)
