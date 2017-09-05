@@ -126,5 +126,103 @@ echo "###Hello world" | pandoc-tour-exe
 
 Note that `###Helloworld` markdown string is converted to html string 
 
-### Retrieving information from pandoc markdown parse tree
+### Retrieving Meta information from pandoc markdown parse tree
 
+Meta information about the markdown document is written in the form of yaml format.
+
+Pandoc markdown parser parses the yaml meta information and keeps it in the meta section of the ```Pandoc``` record
+
+```haskell
+    data Pandoc = Pandoc Meta [Block]
+```
+
+Meta contains meta information about the pandoc document written in the yaml format.
+
+```haskell
+-- | Metadata for the document:  title, authors, date.
+newtype Meta = Meta { unMeta :: M.Map String MetaValue }
+               deriving (Eq, Ord, Show, Read, Typeable, Data, Generic)
+
+data MetaValue = MetaMap (M.Map String MetaValue)
+               | MetaList [MetaValue]
+               | MetaBool Bool
+               | MetaString String
+               | MetaInlines [Inline]
+               | MetaBlocks [Block]
+               deriving (Eq, Ord, Show, Read, Typeable, Data, Generic)
+               
+-- | Inline elements.
+data Inline
+    = Str String            -- ^ Text (string)
+    | Emph [Inline]         -- ^ Emphasized text (list of inlines)
+    | Strong [Inline]       -- ^ Strongly emphasized text (list of inlines)
+    | Strikeout [Inline]    -- ^ Strikeout text (list of inlines)
+    | Superscript [Inline]  -- ^ Superscripted text (list of inlines)
+    | Subscript [Inline]    -- ^ Subscripted text (list of inlines)
+    | SmallCaps [Inline]    -- ^ Small caps text (list of inlines)
+    | Quoted QuoteType [Inline] -- ^ Quoted text (list of inlines)
+    | Cite [Citation]  [Inline] -- ^ Citation (list of inlines)
+    | Code Attr String      -- ^ Inline code (literal)
+    | Space                 -- ^ Inter-word space
+    | SoftBreak             -- ^ Soft line break
+    | LineBreak             -- ^ Hard line break
+    | Math MathType String  -- ^ TeX math (literal)
+    | RawInline Format String -- ^ Raw inline
+    | Link Attr [Inline] Target  -- ^ Hyperlink: alt text (list of inlines), target
+    | Image Attr [Inline] Target -- ^ Image:  alt text (list of inlines), target
+    | Note [Block]          -- ^ Footnote or endnote
+    | Span Attr [Inline]    -- ^ Generic inline container with attributes
+    deriving (Show, Eq, Ord, Read, Typeable, Data, Generic)
+    
+ata Block
+    = Plain [Inline]        -- ^ Plain text, not a paragraph
+    | Para [Inline]         -- ^ Paragraph
+    | LineBlock [[Inline]]  -- ^ Multiple non-breaking lines
+    | CodeBlock Attr String -- ^ Code block (literal) with attributes
+    | RawBlock Format String -- ^ Raw block
+    | BlockQuote [Block]    -- ^ Block quote (list of blocks)
+    | OrderedList ListAttributes [[Block]] -- ^ Ordered list (attributes
+                            -- and a list of items, each a list of blocks)
+    | BulletList [[Block]]  -- ^ Bullet list (list of items, each
+                            -- a list of blocks)
+    | DefinitionList [([Inline],[[Block]])]  -- ^ Definition list
+                            -- Each list item is a pair consisting of a
+                            -- term (a list of inlines) and one or more
+                            -- definitions (each a list of blocks)
+    | Header Int Attr [Inline] -- ^ Header - level (integer) and text (inlines)
+    | HorizontalRule        -- ^ Horizontal rule
+    | Table [Inline] [Alignment] [Double] [TableCell] [[TableCell]]  -- ^ Table,
+                            -- with caption, column alignments (required),
+                            -- relative column widths (0 = default),
+                            -- column headers (each a list of blocks), and
+                            -- rows (each a list of lists of blocks)
+    | Div Attr [Block]      -- ^ Generic block container with attributes
+    | Null                  -- ^ Nothing
+    deriving (Eq, Ord, Read, Show, Typeable, Data, Generic)
+               
+```
+
+Above definitions are hidden in the ```pandoc``` lib. In order to access above definitions ```pandoc-definitions``` lib must be added to the dependencies.
+
+Using above definitions these functions are written to access the title, summary, date and tags of the markdown document.
+
+```markdown
+
+---
+  title : hello world
+  tags: [java, scala, haskell]
+  date: 02-09-2017
+  summary:
+        Scala is a eagerly evaluated, typesafe functional programming
+        language widely used by many companies all
+        over the world. Haskell is non-strict, typesafe functional programming language with great type-inferring compiler. 
+        
+---
+
+
+### Hello world
+Hello world is the widely used string in the programming community.
+
+```
+
+Meta functions can be used to retrieve this meta information of the above markdown document.
